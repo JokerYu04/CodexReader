@@ -9,7 +9,7 @@
   "scripts": {
     "start": "electron .",
     "dev": "electron .",
-    "dist": "electron-builder --win portable"
+    "dist": "npx --yes electron-builder@24 --win portable"
   },
   "engines": {
     "node": ">=18"

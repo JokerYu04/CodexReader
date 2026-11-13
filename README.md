@@ -87,11 +87,12 @@ npm start
 ## 数据与隐私
 
 - 所有书籍、阅读进度、设置都只存在**本地**，不联网、不上传、无账号
-- 位置：项目目录下的 `data/`（`library.json`、`books/`、`state.json`）
-- 若程序目录不可写（例如装在 `C:\Program Files`），会自动退回到系统用户数据目录
+- 位置：
+  - 从源码运行（`npm start`）：项目目录下的 `data/`（`library.json`、`books/`、`state.json`）
+  - 便携版 exe：`%APPDATA%\Codex\data`（Windows 用户数据目录，程序包本身是只读的）
 - `data/` 与 `node_modules/` 已在 `.gitignore` 里，**不会**被提交到仓库 —— 分享仓库不会泄露你的书单
 
-迁移到新电脑：把 `data/` 整个目录拷过去即可（书籍文件也在这个目录里）。
+迁移到新电脑：把上面说的 `data/` 整个目录拷到新机器对应位置即可（书籍文件也在这个目录里）。
 
 ---
 
@@ -123,7 +124,7 @@ npm install
 npm run dist          # 等价于 electron-builder --win portable
 ```
 
-产物在 `dist/CodexReader-1.0.0-portable.exe`，单文件免安装。首次打包需要联网下载 Electron 与 NSIS 工具链。
+产物在 `dist/CodexReader-1.0.0-portable.exe`，单文件免安装。首次打包会自动下载 `electron-builder` 与 NSIS 工具链，需要联网（约几分钟）。
 
 ---
 
