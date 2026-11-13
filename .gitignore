@@ -1,0 +1,28 @@
+# 依赖
+node_modules/
+
+# 用户数据（书库、阅读进度、日志）—— 绝不提交，避免泄露个人阅读内容
+data/
+
+# 打包产物
+dist/
+release/
+out/
+*.exe
+*.zip
+*.7z
+*.dmg
+*.AppImage
+
+# 本地图标副本（仅用于本机桌面快捷方式绕过 Windows 图标缓存）
+assets/icon-codex-fresh.ico
+
+# 日志
+*.log
+npm-debug.log*
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

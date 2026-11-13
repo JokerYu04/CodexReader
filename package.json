@@ -1,0 +1,45 @@
+{
+  "name": "codex-novel-reader",
+  "productName": "Codex",
+  "version": "1.0.0",
+  "description": "Codex 桌面客户端风格的本地小说阅读器（Electron）",
+  "author": "heqiao",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11"
+  },
+  "dependencies": {
+    "yauzl": "^2.10.0"
+  },
+  "build": {
+    "appId": "com.codexreader.app",
+    "productName": "Codex",
+    "files": [
+      "main.js",
+      "preload.js",
+      "src/**/*",
+      "frontend/**/*",
+      "assets/icon-app.ico",
+      "icon.ico",
+      "package.json"
+    ],
+    "win": {
+      "icon": "assets/icon-app.ico",
+      "target": [
+        "portable"
+      ]
+    },
+    "portable": {
+      "artifactName": "CodexReader-${version}-portable.exe"
+    }
+  }
+}

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-skin="codex">
+<head>
+<meta charset="UTF-8">
+<title>Codex</title>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/skin-codex.css">
+</head>
+<body class="reader" data-skin="codex">
+
+<!-- ============ 窗口顶栏（真 Codex 风格：菜单栏 + 同排窗口按钮） ============ -->
+<div class="cx-chrome" id="cx-chrome">
+  <div class="cx-ch-left">
+    <span class="cx-ch-nav" title="后退">←</span>
+    <span class="cx-ch-nav" title="前进">→</span>
+    <span class="cx-ch-menu" data-m="file">文件</span>
+    <span class="cx-ch-menu" data-m="edit">编辑</span>
+    <span class="cx-ch-menu" data-m="view">视图</span>
+    <span class="cx-ch-menu" data-m="help">帮助</span>
+  </div>
+  <div class="cx-ch-right">
+    <button class="cx-ch-btn" id="cx-ch-min" title="最小化" type="button">
+      <svg viewBox="0 0 12 12" width="12" height="12" stroke="currentColor" stroke-width="1.1"><path d="M1.5 6h9"/></svg>
+    </button>
+    <button class="cx-ch-btn cx-ch-max" id="cx-ch-max" title="最大化" type="button">
+      <svg class="cx-max-ico-max" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="1.5" y="1.5" width="9" height="9" rx="1.2"/></svg>
+      <svg class="cx-max-ico-restore" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.1"><rect x="1.5" y="3.5" width="7" height="7" rx="1.2"/><path d="M3.8 3.4V2.1c0-.4.3-.7.7-.7h5.2c.4 0 .7.3.7.7v5.2c0 .4-.3.7-.7.7H8.6"/></svg>
+    </button>
+    <button class="cx-ch-btn cx-ch-close" id="cx-ch-close" title="关闭" type="button">
+      <svg viewBox="0 0 12 12" width="12" height="12" stroke="currentColor" stroke-width="1.1"><path d="M2 2l8 8M10 2l-8 8"/></svg>
+    </button>
+  </div>
+</div>
+
+<section class="cx-app" id="cx-app">
+
+  <!-- ============ 左侧边栏（Codex 桌面端 1:1） ============ -->
+  <aside class="cx-side" aria-hidden="true">
+    <div class="cx-side-head">
+      <span class="cx-side-brand-name">Codex<span class="cx-chev">⌄</span></span>
+      <span class="cx-side-head-icons">
+        <span class="cx-hi" title="通知">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5a4 4 0 018 0c0 3 .8 4 1.5 4.8H2.5C3.2 10.5 4 9.5 4 6.5z"/><path d="M6.5 12.8a1.6 1.6 0 002.9 0"/></svg>
+        </span>
+        <span class="cx-hi" title="搜索">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="7" cy="7" r="4.6"/><path d="M10.6 10.6L13.5 13.5"/></svg>
+        </span>
+      </span>
+    </div>
+
+    <div class="cx-side-scroll">
+      <nav class="cx-nav">
+        <div class="cx-nav-item" id="cx-newchat-btn" title="新聊天">
+          <span class="cx-nav-ico"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11.3 2.6l2.1 2.1L5.2 13 2.5 13.5 3 10.8z"/></svg></span>新聊天
+        </div>
+        <div class="cx-nav-item">
+          <span class="cx-nav-ico"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="5.6"/><path d="M8 4.8V8l2.2 1.6"/></svg></span>定时任务
+        </div>
+        <div class="cx-nav-item">
+          <span class="cx-nav-ico"><svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="2.6"/><path d="M10.6 5.4v4.2c0 1 .8 1.8 1.8 1.8s1.8-.8 1.8-1.8V8a5.9 5.9 0 10-2.3 4.7"/></svg></span>插件
+        </div>
+      </nav>
+
+      <!-- 侧栏内容由 js/sidebar-codex.js 动态渲染（可增删改名，localStorage 持久化） -->
+      <div id="cx-side-groups"></div>
+    </div>
+
+    <div class="cx-side-foot">
+      <span class="cx-foot-gear" id="cx-settings-btn" title="设置" role="button">
+        <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/><circle cx="5.5" cy="4.5" r="1.2" style="fill:var(--bg-side)"/><circle cx="10.5" cy="8" r="1.2" style="fill:var(--bg-side)"/><circle cx="6.5" cy="11.5" r="1.2" style="fill:var(--bg-side)"/></svg>
+      </span>
+      <span class="cx-foot-name">用户1239094459</span>
+      <span class="cx-foot-right">
+        <button class="cx-update-btn" id="cx-update-btn" title="检查更新" type="button">
+          <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.5v9M4.5 9L8 12.5 11.5 9"/></svg>
+        </button>
+      </span>
+    </div>
+  </aside>
+
+  <!-- 侧栏宽度拖拽分界线 -->
+  <div class="cx-resizer" id="cx-resizer" title=""></div>
+
+  <!-- ============ 右侧主区 ============ -->
+  <main class="cx-main">
+    <!-- Codex 风格标题栏：文件夹 + 会话标题 + 右侧工具图标 -->
+    <header class="cx-titlebar">
+      <div class="cx-title-left">
+        <span class="cx-title-ico">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"><path d="M1.8 4.2c0-.7.5-1.2 1.2-1.2h3l1.4 1.6h5.6c.7 0 1.2.5 1.2 1.2v6.8c0 .7-.5 1.2-1.2 1.2H3c-.7 0-1.2-.5-1.2-1.2z"/></svg>
+        </span>
+        <span id="cx-title" class="cx-title-text" title="双击重命名">需求分析</span>
+      </div>
+      <div class="cx-title-right">
+        <span id="cx-progress" class="cx-prog"></span>
+        <span class="cx-tb-ico" title="更多">⋯</span>
+        <span class="cx-tb-ico" title="分支">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="4.5" cy="3.5" r="1.6"/><circle cx="4.5" cy="12.5" r="1.6"/><circle cx="11.5" cy="5.5" r="1.6"/><path d="M4.5 5.1v5.8M11.5 7.1c0 2.2-2.4 2.4-4.6 3"/></svg>
+        </span>
+        <span class="cx-tb-ico" id="cx-side-toggle" title="侧栏">
+          <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><rect x="1.8" y="2.8" width="12.4" height="10.4" rx="1.6"/><path d="M6.2 2.8v10.4"/></svg>
+        </span>
+      </div>
+    </header>
+
+    <!-- 对话区 -->
+    <div id="cx-scroll" class="cx-scroll">
+      <div id="cx-stream" class="cx-stream"></div>
+    </div>
+
+    <!-- Codex 风格底部输入区 -->
+    <div class="cx-bottom">
+      <div class="cx-composer">
+        <textarea id="cx-input" rows="1" placeholder="和 Codex 一起工作"></textarea>
+        <div class="cx-comp-row">
+          <div class="cx-comp-left">
+            <span class="cx-plus" id="cx-plus-btn" title="添加">＋</span>
+            <button class="cx-approve" id="cx-approve" type="button"><span class="cx-ap-ico"><svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 8.2V3.6a.9.9 0 011.8 0V7"/><path d="M7.6 7V2.9a.9.9 0 011.8 0V7"/><path d="M9.4 7V3.6a.9.9 0 011.8 0v4.6"/><path d="M11.2 8V6.5a.9.9 0 011.8 0v2.3c0 2.8-1.8 5-4.6 5-1.9 0-2.8-.5-3.8-2L2.9 9.3c-.5-.7-.3-1.5.4-1.9.5-.3 1.2-.2 1.6.3l.9 1"/></svg></span>请求访问</button>
+          </div>
+          <div class="cx-comp-right">
+            <span class="cx-model" id="chsel-host" title="6.1 Sol 中">
+              <span class="cx-model-label">6.1 Sol 中<i class="cx-chev">⌄</i></span>
+              <!-- engine 会把章节 <select id="chsel"> 塞进来：透明覆盖层，点开就是章节列表 -->
+            </span>
+            <button class="cx-send" type="button" title="发送">
+              <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12.5V4M4.5 7.5L8 4l3.5 3.5"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<script src="js/chunker.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/boss-chat.js"></script>
+<script src="js/fake-task.js"></script>
+<script src="js/sidebar-codex.js"></script>
+<script>
+  engine.view = 'codex';
+  bindViewEls();
+  bindKeyboard();
+  bindInput('#cx-input', sendUser);
+
+  const cxInput = document.getElementById('cx-input');
+
+  // ===== 窗口顶栏：菜单下拉 + 窗口控制 =====
+  (function () {
+    const MENUS = {
+      file: [['新聊天', () => { if (window.cxOpenNewChat) cxOpenNewChat(); }],
+             ['退出', () => window.close()]],
+      edit: [['全选', () => { document.execCommand && document.execCommand('selectAll'); }],
+             ['复制', () => { document.execCommand && document.execCommand('copy'); }]],
+      view: [['重新加载', () => location.reload()],
+             ['放大', () => zoom(0.1)],
+             ['缩小', () => zoom(-0.1)],
+             ['重置缩放', () => zoom(0)]],
+      help: [['关于 Codex', () => {
+        const t = document.createElement('div');
+        t.className = 'cx-toast fade-in';
+        t.textContent = 'Codex 0.55.0';
+        document.body.appendChild(t);
+        setTimeout(() => { if (t.parentNode) t.remove(); }, 1800);
+      }]],
+    };
+    function zoom(d) {
+      const lev = JSON.parse(localStorage.getItem('cxZoom') || '0');
+      const next = d === 0 ? 0 : Math.max(-3, Math.min(3, lev + d));
+      localStorage.setItem('cxZoom', String(next));
+      document.body.style.zoom = next === 0 ? '' : String(1 + next * 0.1);
+    }
+    try { const z0 = JSON.parse(localStorage.getItem('cxZoom') || '0'); if (z0) document.body.style.zoom = String(1 + z0 * 0.1); } catch (_) {}
+
+    let openDrop = null;
+    function closeDrop() { if (openDrop) { openDrop.remove(); openDrop = null; } }
+    document.querySelectorAll('.cx-ch-menu').forEach((m) => {
+      m.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (openDrop && openDrop._for === m) { closeDrop(); return; }
+        closeDrop();
+        const items = MENUS[m.dataset.m] || [];
+        const drop = document.createElement('div');
+        drop.className = 'cx-ch-drop';
+        drop._for = m;
+        items.forEach(([label, fn]) => {
+          const it = document.createElement('div');
+          it.className = 'cx-ch-drop-item';
+          it.textContent = label;
+          it.addEventListener('click', () => { closeDrop(); try { fn(); } catch (_) {} });
+          drop.appendChild(it);
+        });
+        document.body.appendChild(drop);
+        const r = m.getBoundingClientRect();
+        drop.style.left = r.left + 'px';
+        drop.style.top = (r.bottom + 2) + 'px';
+        openDrop = drop;
+      });
+    });
+    document.addEventListener('mousedown', (e) => {
+      if (openDrop && !openDrop.contains(e.target) && !(e.target.closest && e.target.closest('.cx-ch-menu'))) closeDrop();
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrop(); });
+
+    const bindWin = (id, act) => {
+      const b = document.getElementById(id);
+      if (b) b.addEventListener('click', () => { if (window.novelApi) novelApi.winControl(act); });
+    };
+    bindWin('cx-ch-min', 'min');
+    bindWin('cx-ch-max', 'max');
+    bindWin('cx-ch-close', 'close');
+
+    // 最大化状态跟随：图标切换（最大化方块 ⇄ 还原双方块）+ title 更新
+    if (window.novelApi && window.novelApi.onMaxState) {
+      window.novelApi.onMaxState((m) => {
+        document.body.classList.toggle('cx-maximized', !!m);
+        const b = document.getElementById('cx-ch-max');
+        if (b) b.title = m ? '向下还原' : '最大化';
+      });
+    }
+  })();
+
+  // 标题栏：侧栏折叠开关
+  const sideToggle = document.getElementById('cx-side-toggle');
+  if (sideToggle) sideToggle.addEventListener('click', () => {
+    document.getElementById('cx-app').classList.toggle('side-off');
+  });
+
+  // 侧栏宽度拖拽（与正版 Codex 一致：拖动分界线调宽，持久化）
+  (() => {
+    const app = document.getElementById('cx-app');
+    const rz = document.getElementById('cx-resizer');
+    if (!app || !rz) return;
+    const MIN = 180, MAX = 460;
+    const saved = parseInt(localStorage.getItem('cxSideW') || '', 10);
+    if (saved >= MIN && saved <= MAX) app.style.setProperty('--side-w', saved + 'px');
+    let startX = 0, startW = 0;
+    rz.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      startX = e.clientX;
+      startW = app.querySelector('.cx-side').getBoundingClientRect().width;
+      app.classList.add('dragging');
+      const move = (ev) => {
+        const w = Math.min(MAX, Math.max(MIN, Math.round(startW + ev.clientX - startX)));
+        app.style.setProperty('--side-w', w + 'px');
+      };
+      const up = () => {
+        app.classList.remove('dragging');
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        const w = parseInt(app.style.getPropertyValue('--side-w'), 10);
+        if (w >= MIN && w <= MAX) localStorage.setItem('cxSideW', String(w));
+        document.body.style.cursor = '';
+      };
+      document.body.style.cursor = 'col-resize';
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+    rz.addEventListener('dblclick', () => {   // 双击恢复默认宽度
+      app.style.setProperty('--side-w', '235px');
+      localStorage.removeItem('cxSideW');
+    });
+  })();
+
+  // 底部更新按钮：点击转一圈并提示已是最新（设置/添加按钮由 sidebar-codex.js 绑定）
+  const upBtn = document.getElementById('cx-update-btn');
+  if (upBtn) upBtn.addEventListener('click', () => {
+    upBtn.classList.add('spin');
+    setTimeout(() => upBtn.classList.remove('spin'), 1400);
+  });
+
+  /* ================= 隐藏锁定（假装应用无响应） =================
+   * · 未锁定：显示「请求访问」（灰色描边胶囊 + 手形图标，与真 Codex 一致）
+   * · 点击一次 → 锁定：按钮文字变「完全访问」（橙色文字 + 盾形图标，无描边）
+   *   同时整个界面假死——点击/按键/滚动全部无反应，鼠标全程转圈，
+   *   但右上角最小化/最大化/关闭照常可点（与真实无响应一致）
+   * · 再点一次「完全访问」按钮 → 解除锁定，恢复「请求访问」
+   * ============================================================ */
+  const HAND_SVG = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 8.2V3.6a.9.9 0 011.8 0V7"/><path d="M7.6 7V2.9a.9.9 0 011.8 0V7"/><path d="M9.4 7V3.6a.9.9 0 011.8 0v4.6"/><path d="M11.2 8V6.5a.9.9 0 011.8 0v2.3c0 2.8-1.8 5-4.6 5-1.9 0-2.8-.5-3.8-2L2.9 9.3c-.5-.7-.3-1.5.4-1.9.5-.3 1.2-.2 1.6.3l.9 1"/></svg>';
+  const SHIELD_SVG = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 1.8l5.2 1.9v3.9c0 3.3-2.2 5.7-5.2 6.6-3-.9-5.2-3.3-5.2-6.6V3.7L8 1.8z"/><path d="M8 5.2v3"/></svg>';
+
+  (() => {
+    let prevPaused = false;
+    window.cxLockActive = false;
+
+    function syncBtns(on) {
+      document.querySelectorAll('.cx-approve').forEach((b) => {
+        b.classList.toggle('locked', on);
+        b.innerHTML = on ? (SHIELD_SVG + '完全访问') : (HAND_SVG + '请求访问');
+      });
+    }
+    window.cxSyncLockBtns = syncBtns;   // 供新聊天界面创建时同步文案
+
+    window.cxToggleLock = function () {
+      const on = !window.cxLockActive;
+      window.cxLockActive = on;
+      document.body.classList.toggle('locked', on);
+      syncBtns(on);
+      try {
+        if (on) {
+          prevPaused = (typeof engine !== 'undefined') ? !!engine.paused : false;
+          if (typeof pause === 'function') pause();          // 假死时内容也不能动
+        } else {
+          if (!prevPaused && typeof resume === 'function') resume();
+          else if (typeof engine !== 'undefined') engine.paused = true;
+        }
+      } catch (_) {}
+    };
+
+    // 锁定时拦截全部按键（F9 保留为逃生口）
+    document.addEventListener('keydown', (e) => {
+      if (!window.cxLockActive) return;
+      if (e.key === 'F9') return;
+      e.stopPropagation();
+      e.preventDefault();
+    }, true);
+  })();
+
+  const ap = document.getElementById('cx-approve');
+  if (ap) ap.addEventListener('click', () => {
+    if (window.cxToggleLock) window.cxToggleLock();
+  });
+
+  // 发送按钮：等价回车
+  const sendBtn = document.querySelector('.cx-send');
+  if (sendBtn) sendBtn.addEventListener('click', () => {
+    const v = cxInput.value.trim();
+    if (!v) return;
+    sendUser(v);
+    cxInput.value = '';
+    cxInput.style.height = 'auto';
+  });
+
+  // 文本框随内容长高
+  (function () {
+    const grow = () => { cxInput.style.height = 'auto'; cxInput.style.height = Math.min(120, cxInput.scrollHeight) + 'px'; };
+    cxInput.addEventListener('input', grow);
+  })();
+
+  (async () => {
+    const s = await Api.getState();
+    if (s && s.bookId) {
+      const book = await Api.getBook(s.bookId);
+      if (book) {
+        engine.book = book; engine.bookId = book.id;
+        engine.paused = true;
+        const st0 = (typeof cxSettings === 'function') ? cxSettings() : {};
+        engine.speed = (st0.speed >= 1 && st0.speed <= 10) ? st0.speed : (s.speed || 5);
+        loadSegment(book.progress && book.progress.chapter || 0, true);
+        // 启动首页：新聊天界面（真 Codex 行为）
+        if (window.cxOpenNewChat) setTimeout(() => cxOpenNewChat(), 120);
+        return;
+      }
+    }
+    engine.streamEl.appendChild(Object.assign(document.createElement('div'), {
+      className: 'cx-note',
+      textContent: '› 书库还是空的。点输入框左下角「＋」添加一本 txt 或 epub，开始工作。',
+    }));
+    if (window.cxOpenNewChat) setTimeout(() => cxOpenNewChat(), 120);
+  })();
+</script>
+</body>
+</html>
